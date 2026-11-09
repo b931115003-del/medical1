@@ -1,0 +1,653 @@
+<title>趙桂英 旅遊病歷</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+
+<style>
+/* Travel medical record — high-contrast, mobile-first, 5-language */
+:root {
+  --bg:          #EEF2F8;
+  --surface:     #FFFFFF;
+  --red:         #B91C1C;
+  --red-soft:    #FEF2F2;
+  --red-border:  #FECACA;
+  --navy:        #1E3A5F;
+  --blue:        #1D4ED8;
+  --blue-soft:   #EFF6FF;
+  --green:       #15803D;
+  --green-soft:  #F0FDF4;
+  --green-border:#BBF7D0;
+  --fg:          #111827;
+  --fg-mid:      #374151;
+  --muted:       #6B7280;
+  --border:      #E5E7EB;
+  color-scheme:  light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:          #0F172A;
+    --surface:     #1E293B;
+    --red:         #F87171;
+    --red-soft:    #1C0A0A;
+    --red-border:  #7F1D1D;
+    --navy:        #3B82F6;
+    --blue:        #60A5FA;
+    --blue-soft:   #0F1E3D;
+    --green:       #34D399;
+    --green-soft:  #052E16;
+    --green-border:#065F46;
+    --fg:          #F1F5F9;
+    --fg-mid:      #CBD5E1;
+    --muted:       #64748B;
+    --border:      #334155;
+    color-scheme:  dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:          #0F172A;
+  --surface:     #1E293B;
+  --red:         #F87171;
+  --red-soft:    #1C0A0A;
+  --red-border:  #7F1D1D;
+  --navy:        #3B82F6;
+  --blue:        #60A5FA;
+  --blue-soft:   #0F1E3D;
+  --green:       #34D399;
+  --green-soft:  #052E16;
+  --green-border:#065F46;
+  --fg:          #F1F5F9;
+  --fg-mid:      #CBD5E1;
+  --muted:       #64748B;
+  --border:      #334155;
+  color-scheme:  dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Noto Sans TC', 'Outfit', system-ui, sans-serif;
+  padding-block: 1.5rem;
+  padding-left:  max(16px, env(safe-area-inset-left,  0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  min-height: 100%;
+}
+
+.wrap {
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+}
+
+/* ── Language bar ── */
+.lang-bar {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
+.lang-btn {
+  padding: .38rem .9rem;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  line-height: 1;
+}
+.lang-btn:hover  { border-color: var(--blue); color: var(--blue); }
+.lang-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+/* ── Emergency header ── */
+.emerg-wrap {
+  background: var(--red);
+  border-radius: 16px;
+  padding: 1.1rem 1.3rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: .9rem;
+}
+
+.emerg-cross { width: 44px; height: 44px; flex-shrink: 0; }
+
+.emerg-text {}
+
+.emerg-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.75);
+  line-height: 1;
+}
+
+.emerg-name {
+  font-family: 'Noto Sans TC', 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin-top: .3rem;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.blood-badge {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.blood-lbl  { font-family:'Outfit',sans-serif; font-size:.5rem; font-weight:700; color:var(--red); letter-spacing:.04em; text-transform:uppercase; line-height:1; }
+.blood-type { font-family:'Outfit',sans-serif; font-size:1.6rem; font-weight:800; color:var(--red); line-height:1.05; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .7rem 1.1rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.c-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.c-icon svg { width: 14px; height: 14px; display: block; }
+.c-icon.blue  { background: var(--blue-soft);  } .c-icon.blue  svg { fill: var(--blue);  }
+.c-icon.red   { background: var(--red-soft);   } .c-icon.red   svg { fill: var(--red);   }
+.c-icon.green { background: var(--green-soft); } .c-icon.green svg { fill: var(--green); }
+
+.card-title {
+  font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+  font-size: .82rem; font-weight: 700; color: var(--fg-mid);
+}
+
+.card-body { padding: .85rem 1.1rem; }
+
+/* ── Info rows ── */
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .42rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.info-row:first-child { padding-top: 0; }
+.info-row:last-child  { border-bottom: none; padding-bottom: 0; }
+
+.i-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: .7rem; font-weight: 600; color: var(--muted);
+  min-width: 100px; flex-shrink: 0; padding-top: .08rem;
+}
+.i-value {
+  font-family: 'Noto Sans TC', 'Outfit', sans-serif;
+  font-size: .88rem; font-weight: 500; color: var(--fg); flex: 1; line-height: 1.4;
+}
+.i-value.big { font-size: 1rem; font-weight: 700; }
+
+/* ── Condition list ── */
+.cond-list { display: flex; flex-direction: column; gap: .5rem; }
+
+.cond-item {
+  display: flex; align-items: flex-start; gap: .6rem;
+  background: var(--red-soft);
+  border: 1px solid var(--red-border);
+  border-radius: 10px;
+  padding: .55rem .8rem;
+}
+.cond-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--red); flex-shrink: 0; margin-top: .38rem;
+}
+.cond-txt {
+  font-family: 'Noto Sans TC', 'Outfit', sans-serif;
+  font-size: .86rem; color: var(--fg); line-height: 1.45;
+}
+
+/* ── None chip ── */
+.none-chip {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .22rem .65rem;
+  background: var(--green-soft);
+  border: 1px solid var(--green-border);
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: .78rem; font-weight: 600; color: var(--green);
+}
+.none-chip svg { width: 11px; height: 11px; fill: var(--green); }
+
+/* ── COVID status ── */
+.covid-row {
+  display: flex; align-items: center; gap: .75rem; padding: .3rem 0;
+}
+.covid-shield {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--green-soft);
+  border: 2px solid var(--green-border);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.covid-shield svg { width: 18px; height: 18px; fill: var(--green); }
+.covid-label {
+  font-family: 'Noto Sans TC', 'Outfit', sans-serif;
+  font-size: .92rem; font-weight: 600; color: var(--green);
+}
+
+/* ── QR collapsible ── */
+.qr-details {
+  background: var(--surface);
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.qr-summary {
+  display: flex; align-items: center; gap: .55rem;
+  padding: .8rem 1.1rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: .78rem; font-weight: 600; color: var(--muted);
+  cursor: pointer; list-style: none; user-select: none;
+}
+.qr-summary::-webkit-details-marker { display: none; }
+.qr-summary svg { width: 15px; height: 15px; fill: var(--muted); flex-shrink: 0; }
+.qr-summary .arrow { margin-left: auto; transition: transform .2s; }
+details[open] .arrow { transform: rotate(180deg); }
+.qr-inner { padding: .3rem 1.1rem 1.1rem; }
+.url-row { display: flex; gap: .5rem; margin-bottom: .9rem; }
+.url-input {
+  flex: 1; min-width: 0;
+  padding: .5rem .85rem;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  font-family: 'Outfit', sans-serif; font-size: .8rem;
+  color: var(--fg); background: var(--bg);
+  outline: none; transition: border-color .15s;
+}
+.url-input:focus { border-color: var(--blue); }
+.url-input::placeholder { color: var(--muted); }
+.gen-btn {
+  padding: .5rem 1.1rem; flex-shrink: 0;
+  background: var(--navy); color: #fff; border: none;
+  border-radius: 9px; font-family: 'Outfit', sans-serif;
+  font-size: .78rem; font-weight: 600; cursor: pointer;
+  transition: background .15s;
+}
+.gen-btn:hover { background: var(--blue); }
+.qr-output {
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
+  padding: 1rem; background: var(--bg); border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.qr-output canvas { border-radius: 5px; display: block; }
+.qr-hint {
+  font-family: 'Outfit', sans-serif;
+  font-size: .68rem; color: var(--muted); text-align: center; line-height: 1.5;
+}
+
+/* ── Footer ── */
+.page-foot {
+  text-align: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: .66rem; color: var(--muted);
+  padding-block: .4rem;
+  line-height: 1.6;
+}
+</style>
+
+<div class="wrap">
+
+  <!-- Language switcher -->
+  <div class="lang-bar">
+    <button class="lang-btn active" data-lang="zh">中文</button>
+    <button class="lang-btn"        data-lang="en">English</button>
+    <button class="lang-btn"        data-lang="ja">日本語</button>
+    <button class="lang-btn"        data-lang="ko">한국어</button>
+    <button class="lang-btn"        data-lang="de">Deutsch</button>
+  </div>
+
+  <!-- Emergency banner -->
+  <div class="emerg-wrap">
+    <!-- Medical cross -->
+    <svg class="emerg-cross" viewBox="0 0 44 44" fill="none">
+      <rect x="18" y="4"  width="8" height="36" rx="2.5" fill="white"/>
+      <rect x="4"  y="18" width="36" height="8"  rx="2.5" fill="white"/>
+    </svg>
+    <div class="emerg-text">
+      <div class="emerg-label" id="e-label"></div>
+      <div class="emerg-name"  id="e-title"></div>
+    </div>
+    <div class="blood-badge">
+      <span class="blood-lbl"  id="e-blood-lbl"></span>
+      <span class="blood-type">A</span>
+    </div>
+  </div>
+
+  <!-- Personal info -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon blue">
+        <svg viewBox="0 0 16 16"><path d="M8 8a3 3 0 100-6 3 3 0 000 6zm2-3a2 2 0 11-4 0 2 2 0 014 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>
+      </div>
+      <span class="card-title" id="s-personal"></span>
+    </div>
+    <div class="card-body">
+      <div class="info-row">
+        <span class="i-label" id="l-name"></span>
+        <span class="i-value big" id="v-name"></span>
+      </div>
+      <div class="info-row">
+        <span class="i-label" id="l-dob"></span>
+        <span class="i-value" id="v-dob"></span>
+      </div>
+      <div class="info-row">
+        <span class="i-label" id="l-age"></span>
+        <span class="i-value" id="v-age"></span>
+      </div>
+      <div class="info-row">
+        <span class="i-label" id="l-blood"></span>
+        <span class="i-value" id="v-blood"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medical conditions -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon red">
+        <svg viewBox="0 0 16 16"><path d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"/><path d="M7.002 11a1 1 0 112 0 1 1 0 01-2 0zM7.1 4.995a.905.905 0 111.8 0l-.35 3.507a.552.552 0 01-1.1 0L7.1 4.995z"/></svg>
+      </div>
+      <span class="card-title" id="s-cond"></span>
+    </div>
+    <div class="card-body">
+      <div class="cond-list">
+        <div class="cond-item"><div class="cond-dot"></div><span class="cond-txt" id="v-cond1"></span></div>
+        <div class="cond-item"><div class="cond-dot"></div><span class="cond-txt" id="v-cond2"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medical history -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon blue">
+        <svg viewBox="0 0 16 16"><path d="M5 4a.5.5 0 000 1h6a.5.5 0 000-1H5zm-.5 2.5A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zM5 8a.5.5 0 000 1h6a.5.5 0 000-1H5zm0 2a.5.5 0 000 1h3a.5.5 0 000-1H5z"/><path d="M2 2a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V2zm10-1H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V2a1 1 0 00-1-1z"/></svg>
+      </div>
+      <span class="card-title" id="s-hist"></span>
+    </div>
+    <div class="card-body">
+      <div class="info-row">
+        <span class="i-label" id="l-surgery"></span>
+        <div class="none-chip">
+          <svg viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg>
+          <span id="v-surgery"></span>
+        </div>
+      </div>
+      <div class="info-row">
+        <span class="i-label" id="l-hosp"></span>
+        <div class="none-chip">
+          <svg viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg>
+          <span id="v-hosp"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COVID-19 -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon green">
+        <svg viewBox="0 0 16 16"><path d="M5.338 1.59a61.44 61.44 0 00-2.837.856.481.481 0 00-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 002.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 00.101.025.615.615 0 00.1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 002.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 00-.328-.39c-.651-.213-1.75-.56-2.837-.856C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 011.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 01-2.517 2.453 7.159 7.159 0 01-1.048.625c-.28.132-.581.24-.883.24s-.604-.108-.883-.24a7.158 7.158 0 01-1.048-.625 11.777 11.777 0 01-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 012.185 1.43 62.456 62.456 0 015.072.56z"/><path d="M10.854 5.146a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0l-1.5-1.5a.5.5 0 11.708-.708L7.5 7.793l2.646-2.647a.5.5 0 01.708 0z"/></svg>
+      </div>
+      <span class="card-title" id="s-covid"></span>
+    </div>
+    <div class="card-body">
+      <div class="covid-row">
+        <div class="covid-shield">
+          <svg viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg>
+        </div>
+        <span class="covid-label" id="v-covid"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR generator (collapsible, for owner only) -->
+  <details class="qr-details">
+    <summary class="qr-summary">
+      <svg viewBox="0 0 16 16"><path d="M0 .5A.5.5 0 01.5 0h3a.5.5 0 010 1H1v2.5a.5.5 0 01-1 0V.5zm12 0a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v3a.5.5 0 01-1 0V1h-2.5a.5.5 0 010-1zM.5 12a.5.5 0 01.5.5V15h2.5a.5.5 0 010 1H.5a.5.5 0 01-.5-.5v-3a.5.5 0 01.5-.5zm15 0a.5.5 0 01.5.5v3a.5.5 0 01-.5.5h-3a.5.5 0 010-1H15v-2.5a.5.5 0 01.5-.5zM3 5h2v2H3zm0 4h2v2H3zm4-4h2v2H7zm4 0h2v2h-2zM7 9h2v2H7zm4 0h2v2h-2z"/></svg>
+      <span id="q-toggle-label">設置 QR Code（僅供本人使用）</span>
+      <svg class="arrow" viewBox="0 0 16 16"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/></svg>
+    </summary>
+    <div class="qr-inner">
+      <div class="url-row">
+        <input type="url" class="url-input" id="urlInput" placeholder="輸入 GitHub Pages 網址...">
+        <button class="gen-btn" id="q-btn" onclick="genQR()">產生</button>
+      </div>
+      <div class="qr-output" id="qrOutput" hidden>
+        <div id="qrcode2"></div>
+        <span class="qr-hint" id="q-hint">截圖此 QR Code 存入手機，出國時讓醫生揃描即可看到您的病歷</span>
+      </div>
+    </div>
+  </details>
+
+  <p class="page-foot" id="p-footer"></p>
+
+</div>
+
+<script>
+/* ── Translations ── */
+const i18n = {
+  zh: {
+    emergLabel:  '緊急醫療資訊',
+    emergTitle:  '趙桂英 旅遊隨身病歷',
+    bloodLbl:    '血型',
+    secPersonal: '個人資料',
+    lblName:     '姓名',
+    valName:     '趙桂英',
+    lblDob:      '出生日期',
+    valDob:      '1965 年 8 月 30 日',
+    lblAge:      '年齡',
+    valAge:      '61 歲',
+    lblBlood:    '血型',
+    valBlood:    'A 型',
+    secCond:     '主要病症',
+    cond1:       '膽固醇稍高',
+    cond2:       '血紅素不足（輕度貧血）',
+    secHist:     '病史',
+    lblSurgery:  '手術史',
+    lblHosp:     '住院史',
+    none:        '無',
+    secCovid:    '新冠肺炎',
+    valCovid:    '未曾感染新冠肺炎',
+    footer:      '本資料為個人醫療資訊，僅供醫療人員參考'
+  },
+  en: {
+    emergLabel:  'Emergency Medical',
+    emergTitle:  'Travel Medical Record — Kuei-Ying Chao',
+    bloodLbl:    'Blood',
+    secPersonal: 'Personal Information',
+    lblName:     'Full Name',
+    valName:     'Kuei-Ying Chao (趙桂英)',
+    lblDob:      'Date of Birth',
+    valDob:      'August 30, 1965',
+    lblAge:      'Age',
+    valAge:      '61 years old',
+    lblBlood:    'Blood Type',
+    valBlood:    'Type A',
+    secCond:     'Medical Conditions',
+    cond1:       'Mildly elevated cholesterol',
+    cond2:       'Low hemoglobin — mild anemia',
+    secHist:     'Medical History',
+    lblSurgery:  'Surgical History',
+    lblHosp:     'Hospitalization History',
+    none:        'None',
+    secCovid:    'COVID-19 Status',
+    valCovid:    'Never infected with COVID-19',
+    footer:      'Personal medical information — for healthcare professionals only'
+  },
+  ja: {
+    emergLabel:  '緊急医療情報',
+    emergTitle:  '旅行用医療記録 — 趙桂英',
+    bloodLbl:    '血液型',
+    secPersonal: '個人情報',
+    lblName:     '氏名',
+    valName:     '趙桂英（チャオ・グイイン）',
+    lblDob:      '生年月日',
+    valDob:      '1965年8月30日',
+    lblAge:      '年齢',
+    valAge:      '61歳',
+    lblBlood:    '血液型',
+    valBlood:    'A型',
+    secCond:     '主な疾患',
+    cond1:       '総コレステロール軽度上昇',
+    cond2:       'ヘモグロビン低値（軽度貧血）',
+    secHist:     '既往歴',
+    lblSurgery:  '手術歴',
+    lblHosp:     '入院歴',
+    none:        'なし',
+    secCovid:    '新型コロナウイルス感染症',
+    valCovid:    '新型コロナウイルスへの感染歴なし',
+    footer:      '個人医療情報 — 医療従事者のみ'
+  },
+  ko: {
+    emergLabel:  '긴급 의료 정보',
+    emergTitle:  '여행용 의료 기록 — 조계영',
+    bloodLbl:    '혈액형',
+    secPersonal: '개인 정보',
+    lblName:     '성명',
+    valName:     '조계영 (趙桂英)',
+    lblDob:      '생년월일',
+    valDob:      '1965년 8월 30일',
+    lblAge:      '나이',
+    valAge:      '만 61세',
+    lblBlood:    '혈액형',
+    valBlood:    'A형',
+    secCond:     '주요 질환',
+    cond1:       '콜레스테롤 경도 상승',
+    cond2:       '헤모글로빈 부족 (경도 빈혈)',
+    secHist:     '병력',
+    lblSurgery:  '수술 이력',
+    lblHosp:     '입원 이력',
+    none:        '없음',
+    secCovid:    '코로나19 상태',
+    valCovid:    '코로나19 감염된 적 없음',
+    footer:      '개인 의료 정보 — 의료 전문가 전용'
+  },
+  de: {
+    emergLabel:  'Notfall-Medizin',
+    emergTitle:  'Reise-Krankenakte — Kuei-Ying Chao',
+    bloodLbl:    'Blut',
+    secPersonal: 'Persönliche Informationen',
+    lblName:     'Name',
+    valName:     'Kuei-Ying Chao (趙桂英)',
+    lblDob:      'Geburtsdatum',
+    valDob:      '30. August 1965',
+    lblAge:      'Alter',
+    valAge:      '61 Jahre',
+    lblBlood:    'Blutgruppe',
+    valBlood:    'Blutgruppe A',
+    secCond:     'Erkrankungen',
+    cond1:       'Leicht erhöhter Cholesterinspiegel',
+    cond2:       'Hämoglobin-Mangel (leichte Anämie)',
+    secHist:     'Krankengeschichte',
+    lblSurgery:  'Operationsgeschichte',
+    lblHosp:     'Krankenhausaufenthalte',
+    none:        'Keine',
+    secCovid:    'COVID-19-Status',
+    valCovid:    'Keine COVID-19-Infektion',
+    footer:      'Persönliche Gesundheitsdaten — nur für medizinisches Fachpersonal'
+  }
+};
+
+/* ── Current language ── */
+let lang = 'zh';
+
+/* ── Apply translations ── */
+function applyLang(l) {
+  const t = i18n[l];
+  document.getElementById('e-label').textContent     = t.emergLabel;
+  document.getElementById('e-title').textContent     = t.emergTitle;
+  document.getElementById('e-blood-lbl').textContent = t.bloodLbl;
+  document.getElementById('s-personal').textContent  = t.secPersonal;
+  document.getElementById('l-name').textContent      = t.lblName;
+  document.getElementById('v-name').textContent      = t.valName;
+  document.getElementById('l-dob').textContent       = t.lblDob;
+  document.getElementById('v-dob').textContent       = t.valDob;
+  document.getElementById('l-age').textContent       = t.lblAge;
+  document.getElementById('v-age').textContent       = t.valAge;
+  document.getElementById('l-blood').textContent     = t.lblBlood;
+  document.getElementById('v-blood').textContent     = t.valBlood;
+  document.getElementById('s-cond').textContent      = t.secCond;
+  document.getElementById('v-cond1').textContent     = t.cond1;
+  document.getElementById('v-cond2').textContent     = t.cond2;
+  document.getElementById('s-hist').textContent      = t.secHist;
+  document.getElementById('l-surgery').textContent   = t.lblSurgery;
+  document.getElementById('v-surgery').textContent   = t.none;
+  document.getElementById('l-hosp').textContent      = t.lblHosp;
+  document.getElementById('v-hosp').textContent      = t.none;
+  document.getElementById('s-covid').textContent     = t.secCovid;
+  document.getElementById('v-covid').textContent     = t.valCovid;
+  document.getElementById('p-footer').textContent    = t.footer;
+
+  // html lang attribute
+  const langMap = { zh:'zh-TW', en:'en', ja:'ja', ko:'ko', de:'de' };
+  document.documentElement.lang = langMap[l];
+}
+
+/* ── Language switcher ── */
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    lang = btn.dataset.lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b === btn));
+    applyLang(lang);
+  });
+});
+
+/* ── QR code generator ── */
+let qrInstance = null;
+
+function genQR() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) return;
+  const output = document.getElementById('qrOutput');
+  const container = document.getElementById('qrcode2');
+  container.innerHTML = '';
+  if (qrInstance) { try { qrInstance.clear(); } catch(e) {} qrInstance = null; }
+  output.hidden = false;
+  qrInstance = new QRCode(container, {
+    text: url, width: 180, height: 180,
+    colorDark: '#111827', colorLight: '#FFFFFF',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+document.getElementById('urlInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') genQR();
+});
+
+/* ── Init ── */
+applyLang('zh');
+</script>
